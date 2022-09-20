@@ -1,5 +1,20 @@
 import { MongoClient } from 'mongodb';
 
+async function connectDatabase() {
+  const url = 'mongodb+srv://projectUser:4K7X3VPlE9adSGVz@cluster0.2uwmvmr.mongodb.net/?retryWrites=true&w=majority';
+  const client = new MongoClient(url);
+  await client.connect();
+  console.log('Connected successfully to server');
+
+  return client;
+}
+
+async function insertDocument(client, document) {
+  const dbName = 'events';
+  const db = client.db(dbName);
+  await db.collection('newsletter').insertOne(document);
+}
+
 async function handler(req, res) {
   if (req.method === 'POST') {
     const userEmail = req.body.email;
@@ -9,24 +24,23 @@ async function handler(req, res) {
       return;
     }
 
-    const url = 'mongodb+srv://projectUser:4K7X3VPlE9adSGVz@cluster0.2uwmvmr.mongodb.net/?retryWrites=true&w=majority';
-    const client = new MongoClient(url);
-
-    const dbName = 'events';
-
-    async function main() {
-      await client.connect();
-      console.log('Connected successfully to server');
-      const db = client.db(dbName);
-      await db.collection('newsletter').insertOne({ email: userEmail });
-
-      return res.status(201).json({ message: 'Signed up!' });
+    try {
+      client = await connectDatabase();
+    } catch (error) {
+      res.status(500).json({ message: 'Connection to the database failed!' });
+      return;
     }
 
-    main()
-      .then(console.log(userEmail))
-      .catch(console.error)
-      .finally(() => client.close());
+    try {
+      await insertDocument(client, { email: userEmail });
+      client.close();
+    } catch (error) {
+      res.status(500).json({ message: 'Inserting base failed!' });
+      return;
+    }
+
+    res.status(201).json({ message: 'Signed up!' });
+
   };
 }
 
