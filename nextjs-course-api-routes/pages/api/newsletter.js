@@ -1,7 +1,7 @@
 import { MongoClient } from 'mongodb';
 
 async function connectDatabase() {
-  const url = 'mongodb+srv://projectUser:4K7X3VPlE9adSGVz@cluster0.2uwmvmr.mongodb.net/?retryWrites=true&w=majority';
+  const url = 'mongodb+srv://korisnik:kupDmeGAR8J2FrFv@cluster0.2uwmvmr.mongodb.net/?retryWrites=true&w=majority';
   const client = new MongoClient(url);
   await client.connect();
   console.log('Connected successfully to server');

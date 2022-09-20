@@ -3,7 +3,7 @@ import { MongoClient } from 'mongodb';
 async function handler(req, res) {
   const eventId = req.query.eventId;
 
-  const url = 'mongodb+srv://projectUser:4K7X3VPlE9adSGVz@cluster0.2uwmvmr.mongodb.net/?retryWrites=true&w=majority';
+  const url = 'mongodb+srv://korisnik:kupDmeGAR8J2FrFv@cluster0.2uwmvmr.mongodb.net/?retryWrites=true&w=majority';
   const client = await new MongoClient(url);
 
   if (req.method === 'POST') {
