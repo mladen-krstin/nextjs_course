@@ -1,8 +1,11 @@
 import { MongoClient } from 'mongodb';
 
-import { connectDatabase, insertDocument } from '../../helpers/db-utils';
+// import { connectDatabase, insertDocument } from '../../helpers/db-utils';
 
 async function handler(req, res) {
+  const url = 'mongodb+srv://korisnik:kupDmeGAR8J2FrFv@cluster0.2uwmvmr.mongodb.net/?retryWrites=true&w=majority';
+  const client = await new MongoClient(url);
+
   if (req.method === 'POST') {
     const userEmail = req.body.email;
 
@@ -11,25 +14,26 @@ async function handler(req, res) {
       return;
     }
 
-    try {
-      client = await connectDatabase();
-    } catch (error) {
-      res.status(500).json({ message: 'Connection to the database failed!' });
-      return;
+    const dbName = 'events';
+
+    async function main() {
+      // Use connect method to connect to the server
+      await client.connect();
+      console.log('Connected successfully to server');
+      const db = client.db(dbName);
+      const collection = await db.collection('emails').insertOne({ email: userEmail });
+
+      // the following code examples can be pasted here...
+
+      return 'done.';
     }
 
-    try {
-      await insertDocument(client, 'newsletter', { email: userEmail });
-      client.close();
-    } catch (error) {
-      res.status(500).json({ message: 'Inserting data failed!' });
-      return;
-    }
+    main()
+      .then(console.log)
+      .catch(console.error)
+      .finally(() => client.close());
   }
   res.status(201).json({ message: 'Signed up!' });
-
 };
-
-
 
 export default handler;
