@@ -1,19 +1,6 @@
 import { MongoClient } from 'mongodb';
 
-async function connectDatabase() {
-  const url = 'mongodb+srv://korisnik:kupDmeGAR8J2FrFv@cluster0.2uwmvmr.mongodb.net/?retryWrites=true&w=majority';
-  const client = new MongoClient(url);
-  await client.connect();
-  console.log('Connected successfully to server');
-
-  return client;
-}
-
-async function insertDocument(client, document) {
-  const dbName = 'events';
-  const db = client.db(dbName);
-  await db.collection('newsletter').insertOne(document);
-}
+import { connectDatabase, insertDocument } from '../../helpers/db-utils';
 
 async function handler(req, res) {
   if (req.method === 'POST') {
@@ -32,16 +19,17 @@ async function handler(req, res) {
     }
 
     try {
-      await insertDocument(client, { email: userEmail });
+      await insertDocument(client, 'newsletter', { email: userEmail });
       client.close();
     } catch (error) {
-      res.status(500).json({ message: 'Inserting base failed!' });
+      res.status(500).json({ message: 'Inserting data failed!' });
       return;
     }
+  }
+  res.status(201).json({ message: 'Signed up!' });
 
-    res.status(201).json({ message: 'Signed up!' });
+};
 
-  };
-}
+
 
 export default handler;
