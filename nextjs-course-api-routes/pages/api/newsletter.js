@@ -1,4 +1,4 @@
-mport { MongoClient } from 'mongodb';
+import { MongoClient } from 'mongodb';
 
 // import { connectDatabase, insertDocument } from '../../helpers/db-utils';
 
