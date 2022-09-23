@@ -1,4 +1,6 @@
-import { MongoClient } from 'mongodb';
+mport { MongoClient } from 'mongodb';
+
+// import { connectDatabase, insertDocument } from '../../helpers/db-utils';
 
 async function handler(req, res) {
   const url = 'mongodb+srv://korisnik:kupDmeGAR8J2FrFv@cluster0.2uwmvmr.mongodb.net/?retryWrites=true&w=majority';
