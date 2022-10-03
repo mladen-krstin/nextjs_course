@@ -2,9 +2,6 @@ import { hashPassword } from '../../../lib/auth';
 import { connectToDatabase } from '../../../lib/db';
 
 async function handler(req, res) {
-  // if (req.method === 'POST') {
-  //   return;
-  // }
 
   const data = req.body;
 
@@ -27,8 +24,6 @@ async function handler(req, res) {
 
   const client = await connectToDatabase();
 
-  // const db = client.db('auth-demo');
-
   const hashedPassword = hashPassword(password);
 
   client.connect((err) => {
@@ -40,11 +35,6 @@ async function handler(req, res) {
       });
   });
 
-  // const result = await db.collection('users').insertOne({
-  //   email: email,
-  //   password: hashedPassword
-  // });
-  
   res.status(201).json({ message: 'Created user!' });
 
 };
