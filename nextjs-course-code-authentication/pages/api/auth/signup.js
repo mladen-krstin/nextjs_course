@@ -31,7 +31,7 @@ async function handler(req, res) {
     collection
       .insertOne({ email: email, password: hashedPassword })
       .then((result) => {
-        console.log("One user added", result);
+        console.log("New user is added", result);
       });
   });
 
