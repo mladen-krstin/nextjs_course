@@ -22,9 +22,18 @@ async function handler(req, res) {
     return;
   }
 
+
   const client = await connectToDatabase();
 
-  const hashedPassword = hashPassword(password);
+  const existingUser = await client.db().collection("users").findOne({ email: email });
+  console.log(existingUser, email);
+
+  if (existingUser) {
+    res.status(422).json({ message: 'User exists already!' });
+    return;
+  }
+
+  const hashedPassword = await hashPassword(password);
 
   client.connect((err) => {
     const collection = client.db("auth-demo").collection("users");
